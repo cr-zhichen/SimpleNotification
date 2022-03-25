@@ -9,10 +9,6 @@
 
 ## 使用方法
 
-### 调用前准备
-
-将[Notice.cs](./Assets/Scripts/Notice.cs)脚本挂载到场景中  
-
 ### 显示通知
 
 示例调用：
