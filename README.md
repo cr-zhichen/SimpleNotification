@@ -1,5 +1,12 @@
 # 简单的Unity全局通知
 
+[WebGl示例](https://cr-zhichen.github.io/SimpleNotification/)
+
+## 资源使用方式
+
+1. 直接克隆该项目
+2. 导入[unitypackage包](https://github.com/cr-zhichen/SimpleNotification/releases)
+
 ## 使用方法
 
 ### 调用前准备
