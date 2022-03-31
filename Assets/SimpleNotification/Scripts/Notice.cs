@@ -80,7 +80,7 @@ public class Notice : MonoBehaviour
         var noticeImage = g.transform.GetChild(0).GetComponent<Image>();
         var noticeText = g.transform.GetChild(1).GetComponent<Text>();
         
-        noticeImage.color = notifyVariable.color;
+        StartCoroutine(GradientColor(new Color(1.0f,1.0f,1.0f,0.0f),notifyVariable.color,0.5f,noticeImage));
         noticeText.text = notifyVariable.text;
         
         _notificationObjectList.Add(g);
@@ -96,8 +96,6 @@ public class Notice : MonoBehaviour
             if (onClick != null) onClick(g);
         });
         
-        
-
         return g;
     }
 
@@ -114,6 +112,47 @@ public class Notice : MonoBehaviour
         CloseToInform(g);
 
     }
+    
+    /// <summary>
+    /// 修改通知内容
+    /// </summary>
+    /// <param name="g">需要修改的通知物体</param>
+    /// <param name="color">修改后颜色</param>
+    /// <param name="text">修改后文字</param>
+    public void ChangeNotice(GameObject g,Color? color,[CanBeNull] string text)
+    {
+        if (g==null)
+        {
+            return;
+        }
+        
+        var noticeImage = g.transform.GetChild(0).GetComponent<Image>();
+        var noticeText = g.transform.GetChild(1).GetComponent<Text>();
+        
+        if (color != null)
+        {
+            StartCoroutine(GradientColor(noticeImage.color,color?? Color.black,0.5f,noticeImage));
+        }
+
+        if (text!=null)
+        {
+            noticeText.text = text;
+        }
+    }
+
+    //使用协成函数，传入两个颜色，将第一个颜色渐变到第二个颜色
+    IEnumerator GradientColor(Color startColor, Color endColor, float time, Image image)
+    {
+        float i = 0.0f;
+        float rate = 1.0f / time;
+        while (i < 1.0f)
+        {
+            i += Time.deltaTime * rate;
+            image.color = Color.Lerp(startColor, endColor, i);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    
 
     /// <summary>
     /// 关闭通知
@@ -125,10 +164,11 @@ public class Notice : MonoBehaviour
         {
             if (g==_g)
             {
-                
+                var noticeImage = g.transform.GetChild(0).GetComponent<Image>();
                 _g.GetComponent<Animator>().SetTrigger("Close");
 
                 Destroy(_g,1.0f);
+                StartCoroutine(GradientColor(noticeImage.color, new Color(1.0f, 1.0f, 1.0f, 0.0f), 0.5f, noticeImage));
                 _notificationObjectList.Remove(_g);
                 return;
             }
