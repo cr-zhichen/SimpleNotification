@@ -24,6 +24,10 @@ GameObject _notice =  Notice.Instance.AccordingToNotice(new Notice.NotifyVariabl
             whetherToShutDownAutomatical = true,
             //通知是否消失
             showTime = 3.0f
+        },(g) =>
+        {
+            //点击通知后删除通知
+            Notice.Instance.CloseToInform(g);
         });
 ```
 
@@ -43,6 +47,6 @@ Notice.Instance.CloseToInform(_notice);
 Notice.Instance.CloseToInform();
 ```
 
-## 演示截图
+## 演示视频
 
-![演示截图](https://tc.chengrui.xyz/2022/03/25/1648199064343.gif)  
+https://user-images.githubusercontent.com/57337795/161028475-9503088d-726f-4411-a664-7d7e6638b5cc.mp4
