@@ -9,6 +9,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,16 @@ public class Notice : MonoBehaviour
     private Canvas _noticeCanvas;
 
     public List<GameObject> _notificationObjectList;
+    
+    /// <summary>
+    /// 点击按钮关闭回调
+    /// </summary>
+    /// <param name="g">通知物体</param>
+    public delegate void OnClick(GameObject g);
 
+    /// <summary>
+    /// 通知内容
+    /// </summary>
     public class NotifyVariable
     {
         /// <summary>
@@ -59,25 +69,34 @@ public class Notice : MonoBehaviour
     /// <summary>
     /// 显示通知
     /// </summary>
-    /// <param name="text">需要显示的文字</param>
-    /// <param name="color">显示颜色(默认为白色)</param>
-    /// <param name="whetherToShutDownAutomatical">是否自动消失</param>
-    /// <param name="showTime">显示时间（默认为3s）</param>
-    /// <returns>通知物体</returns>
-    public GameObject AccordingToNotice(NotifyVariable notifyVariable)
+    /// <param name="notifyVariable">传入类</param>
+    /// <param name="onClick">点击按钮回调</param>
+    /// <returns></returns>
+    public GameObject AccordingToNotice(NotifyVariable notifyVariable,[CanBeNull] OnClick onClick = null)
     {
 
         GameObject g = Instantiate(notificationObject, _noticeCanvas.transform);
 
-        g.transform.GetChild(0).GetComponent<Image>().color = notifyVariable.color;
-        g.transform.GetChild(1).GetComponent<Text>().text = notifyVariable.text;
+        var noticeImage = g.transform.GetChild(0).GetComponent<Image>();
+        var noticeText = g.transform.GetChild(1).GetComponent<Text>();
+        
+        noticeImage.color = notifyVariable.color;
+        noticeText.text = notifyVariable.text;
         
         _notificationObjectList.Add(g);
 
         if (notifyVariable.whetherToShutDownAutomatical==true)
         {
             StartCoroutine(DelayToDelete(notifyVariable.showTime, g));
+
         }
+
+        noticeImage.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            if (onClick != null) onClick(g);
+        });
+        
+        
 
         return g;
     }

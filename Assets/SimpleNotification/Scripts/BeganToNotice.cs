@@ -15,6 +15,9 @@ public class BeganToNotice : MonoBehaviour
             color = notifyVariables[i].color,
             whetherToShutDownAutomatical = notifyVariables[i].whetherToShutDownAutomatical,
             showTime = notifyVariables[i].showTime
+        },(g) =>
+        {
+            Notice.Instance.CloseToInform(g);
         });
     }
 
